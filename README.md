@@ -50,6 +50,19 @@ npm run build    # production build in /dist
 npm run preview  # preview the build
 ```
 
+## Testing & quality
+
+The project ships with a Vitest unit + component test suite and an ESLint config.
+
+```bash
+npm test     # run the test suite (Vitest)
+npm run lint # static analysis (ESLint)
+```
+
+Tests cover the footprint engine (`calculator`), the impact-ranking logic (`actions`),
+commitment persistence (`commitments`), the coaching fallback (`ai`), and the onboarding
+component. CI (`.github/workflows/ci.yml`) runs lint, tests, and a production build on every push.
+
 ## Enable AI coaching (optional)
 
 The app works fully without this — it falls back to a built-in coach.

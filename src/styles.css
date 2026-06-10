@@ -120,3 +120,13 @@ input[type="range"] { width: 100%; accent-color: var(--green); }
   .commit-actions { width: 100%; }
   .commit-actions .btn { flex: 1; }
 }
+
+/* Commitment banner */
+.commit-banner { border-left: 4px solid var(--green); margin-bottom: 18px; }
+.commit-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+.commit-actions { display: flex; align-items: center; gap: 10px; }
+.commit-list { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 14px; }
+@media (max-width: 560px) {
+  .commit-actions { width: 100%; }
+  .commit-actions .btn { flex: 1; }
+}
