@@ -3,6 +3,10 @@ import { tonnes } from '../lib/calculator.js'
 import { APP_URL, REPO_URL } from '../config.js'
 
 // Ties the live product to the contest's LinkedIn submission artifact.
+/**
+ * Share card with a LinkedIn deep-link and a copyable, pre-filled caption.
+ * @param {{footprint:object, committedSavingKg?:number}} props
+ */
 export default function ShareCard({ footprint, committedSavingKg = 0 }) {
   const [copied, setCopied] = useState(false)
   const t = tonnes(footprint.total)

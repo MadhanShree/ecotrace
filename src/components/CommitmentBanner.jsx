@@ -2,6 +2,10 @@ import { daysAgoLabel, daysSince } from '../lib/commitments.js'
 
 // The "track" half of the product: shows the user what they committed to,
 // how long ago, and lets them check in. Renders nothing if no commitment.
+/**
+ * Persistent banner showing the committed plan, its age, and check-ins. Renders nothing when no commitment is active.
+ * @param {{commitment:object|null, actions:Array, onCheckIn:Function, onClear:Function}} props
+ */
 export default function CommitmentBanner({ commitment, actions, onCheckIn, onClear }) {
   if (!commitment) return null
 

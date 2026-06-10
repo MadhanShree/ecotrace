@@ -1,22 +1,40 @@
 import { tonnes } from './calculator.js'
 import { BENCHMARKS } from './factors.js'
 
-// Personalized coaching message. Uses Google Gemini when a key is provided,
-// otherwise falls back to a deterministic rules-based message so the app is
-// always fully functional for evaluation (and if the API call fails).
+/**
+ * @typedef {Object} Coach
+ * @property {string} text   The coaching message shown to the user.
+ * @property {'gemini'|'local'} source Where the message came from.
+ */
+
+/**
+ * Produce a short, personalized coaching message. Uses Google Gemini when an
+ * API key is configured, and always falls back to a deterministic local coach
+ * so the app stays fully functional without a key or network.
+ *
+ * @param {{ footprint: import('./calculator.js').Footprint, topActions: Array<{title:string,savingKg:number}> }} input
+ * @returns {Promise<Coach>} The coaching message and its source.
+ */
 export async function getCoachMessage({ footprint, topActions }) {
   const key = import.meta.env.VITE_GEMINI_API_KEY
   if (key) {
     try {
       return await geminiCoach({ footprint, topActions, key })
     } catch (e) {
-      // Falls through to the local coach on any error (bad key, network, quota).
-      console.warn('Gemini unavailable, using local coach:', e.message)
+      // Fall back to the local coach on any error (bad key, network, quota).
+      if (import.meta.env.DEV) {
+        console.warn('Gemini unavailable, using local coach:', e.message)
+      }
     }
   }
   return localCoach({ footprint, topActions })
 }
 
+/**
+ * Call the Gemini API for a coaching message.
+ * @param {{ footprint: object, topActions: Array, key: string }} input
+ * @returns {Promise<Coach>}
+ */
 async function geminiCoach({ footprint, topActions, key }) {
   const model = 'gemini-2.5-flash'
   const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${key}`
@@ -46,6 +64,11 @@ Write 2-3 short, encouraging sentences. Lead with one concrete thing to do this 
   return { text, source: 'gemini' }
 }
 
+/**
+ * Deterministic, rules-based coaching message used as a fallback.
+ * @param {{ footprint: object, topActions: Array }} input
+ * @returns {Coach}
+ */
 function localCoach({ footprint, topActions }) {
   const t = tonnes(footprint.total)
   const top = topActions[0]
@@ -60,9 +83,16 @@ function localCoach({ footprint, topActions }) {
   return { text: `${context} ${lead} ${close}`, source: 'local' }
 }
 
+/**
+ * Return the key of the largest-emitting category.
+ * @param {{ categories: Record<string, number> }} footprint
+ * @returns {string} The category key.
+ */
 function biggestCategory(footprint) {
   return Object.entries(footprint.categories).sort((a, b) => b[1] - a[1])[0][0]
 }
+
+/** @param {string} s @returns {string} The string with a lower-cased first letter. */
 function lower(s) {
   return s.charAt(0).toLowerCase() + s.slice(1)
 }

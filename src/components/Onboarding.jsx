@@ -2,6 +2,10 @@ import { useState } from 'react'
 
 const STEPS = ['Transport', 'Diet', 'Home', 'Lifestyle']
 
+/**
+ * Four-step onboarding quiz collecting transport, diet, home energy, and lifestyle answers.
+ * @param {{initial?:object, onComplete:Function}} props
+ */
 export default function Onboarding({ initial, onComplete }) {
   const [step, setStep] = useState(0)
   const [p, setP] = useState(

@@ -6,6 +6,10 @@ const EFFORT_LABEL = { 1: 'Effortless', 2: 'Easy', 3: 'Moderate', 4: 'Committed'
 
 // The simulator lets the user toggle actions on and watch their projected
 // footprint fall in real time, then commit to the set they'll actually do.
+/**
+ * Interactive what-if reducer: toggle ranked actions to watch the projected footprint fall, then commit to a plan.
+ * @param {{footprint:object, actions:Array, committedIds?:string[], onCommit?:Function}} props
+ */
 export default function Simulator({ footprint, actions, committedIds = [], onCommit }) {
   const [selected, setSelected] = useState(() => new Set(committedIds))
 

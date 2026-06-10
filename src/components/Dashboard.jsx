@@ -19,6 +19,10 @@ const Charts = lazy(() =>
 const CAT_COLORS = { transport: '#2563eb', diet: '#d97706', home: '#16a34a', goods: '#7c3aed' }
 const CAT_LABELS = { transport: 'Transport', diet: 'Diet', home: 'Home energy', goods: 'Goods & shopping' }
 
+/**
+ * Results dashboard: hero footprint, category donut, AI coach nudge, benchmark comparison, and the share card.
+ * @param {{footprint:object, topActions:Array, committedSavingKg?:number}} props
+ */
 export default function Dashboard({ footprint, topActions, committedSavingKg = 0 }) {
   const t = tonnes(footprint.total)
   const belowAvg = t <= BENCHMARKS.globalAvg

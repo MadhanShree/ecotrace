@@ -126,7 +126,16 @@ export const ACTIONS = [
   },
 ]
 
-// Build a ranked, personalized action list for a given profile.
+/**
+ * Build a personalized, ranked list of reduction actions for a profile.
+ * Each action's saving is computed from the user's own data, then the list is
+ * sorted by impact-per-effort (saving / effort) so the highest-leverage,
+ * lowest-friction wins surface first. Non-applicable or zero-saving actions
+ * are dropped.
+ *
+ * @param {import('../lib/calculator.js').Profile} profile The user's profile.
+ * @returns {Array<{id:string,title:string,category:string,effort:number,cost:string,blurb:string,savingKg:number,score:number}>}
+ */
 export function rankedActions(profile) {
   return ACTIONS
     .filter((a) => (a.appliesIf ? a.appliesIf(profile) : true))

@@ -3,6 +3,10 @@
 
 const KEY = 'ecotrace.commitment.v1'
 
+/**
+ * Load the saved commitment from localStorage, guarding against malformed data.
+ * @returns {{actionIds:string[],committedAt:number,lastCheckIn:number|null,checkInCount:number}|null}
+ */
 export function loadCommitment() {
   try {
     const raw = localStorage.getItem(KEY)
@@ -22,6 +26,10 @@ export function loadCommitment() {
   }
 }
 
+/**
+ * Persist a commitment to localStorage.
+ * @param {object} c The commitment to save.
+ */
 export function saveCommitment(c) {
   try {
     localStorage.setItem(KEY, JSON.stringify(c))
@@ -30,6 +38,7 @@ export function saveCommitment(c) {
   }
 }
 
+/** Remove any saved commitment from localStorage. */
 export function clearCommitment() {
   try {
     localStorage.removeItem(KEY)
@@ -38,13 +47,22 @@ export function clearCommitment() {
   }
 }
 
-// Whole days since a timestamp. Returns 0 for today or any invalid input.
+/**
+ * Whole days elapsed since a timestamp.
+ * @param {number} ts A millisecond timestamp.
+ * @returns {number} Days since `ts` (0 for today or invalid input).
+ */
 export function daysSince(ts) {
   if (!Number.isFinite(ts)) return 0
   const d = Math.floor((Date.now() - ts) / 86_400_000)
   return d > 0 ? d : 0
 }
 
+/**
+ * A friendly relative label for a timestamp ("today", "yesterday", "3 days ago").
+ * @param {number} ts A millisecond timestamp.
+ * @returns {string}
+ */
 export function daysAgoLabel(ts) {
   const d = daysSince(ts)
   if (d === 0) return 'today'
